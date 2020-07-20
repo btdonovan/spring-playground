@@ -62,6 +62,14 @@ public class PagesController {
         return "Hello " + firstName + " " + lastName;
     }
 
+    @GetMapping("/name/{firstname}/{lastname}")
+    public String getNameByPath(
+            @PathVariable(value="firstname") String firstName,
+            @PathVariable(value="lastname") String lastName
+    ) {
+        return "Hello "+firstName+" "+lastName+". How are you?";
+    }
+
     @GetMapping("/name-map")
     public String getMapParams(@RequestParam Map<String,String> querystring) {
         String firstName = querystring.get("firstname");
