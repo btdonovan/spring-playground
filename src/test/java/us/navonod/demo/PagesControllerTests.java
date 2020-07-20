@@ -15,7 +15,8 @@ public class PagesControllerTests {
         hello = new PagesController();
     }
     @Test
-    public void test() {
-        assertEquals("3.141592653589793", hello.helloGet());
+    public void testReturnsPi() {
+        this.mvc.perform(get("/math/pi"))
+            .andExpect();
     }
 }
