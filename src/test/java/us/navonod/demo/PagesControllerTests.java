@@ -16,7 +16,6 @@ public class PagesControllerTests {
     }
     @Test
     public void testReturnsPi() {
-        this.mvc.perform(get("/math/pi"))
-            .andExpect();
+
     }
 }
