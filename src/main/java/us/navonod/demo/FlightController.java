@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -14,14 +16,14 @@ import java.util.List;
 @RestController
 public class FlightController {
 
-
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     static class Flight {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-        @JsonProperty("Departs")
         private Date departs;
-        @JsonProperty("Tickets")
+
         private List<Ticket> tickets;
 
+        @JsonProperty("Departs")
         public Date getDeparts() {
             return departs;
         }
@@ -30,10 +32,11 @@ public class FlightController {
             this.departs = departs;
         }
 
+        @JsonProperty("Tickets")
         public List<Ticket> getTickets() {
             return tickets;
         }
-
+        @JsonProperty("tickets")
         public void setTickets(List<Ticket> tickets) {
             this.tickets = tickets;
         }
@@ -41,23 +44,25 @@ public class FlightController {
 
 
     static class Ticket {
-        @JsonProperty("Passenger")
+
         private Passenger passenger;
-        @JsonProperty("Price")
+
         private int price;
 
+        @JsonProperty("Passenger")
         public Passenger getPassenger() {
             return passenger;
         }
-
+        @JsonProperty("passenger")
         public void setPassenger(Passenger passenger) {
             this.passenger = passenger;
         }
 
+        @JsonProperty("Price")
         public int getPrice() {
             return price;
         }
-
+        @JsonProperty("price")
         public void setPrice(int price) {
             this.price = price;
         }
@@ -65,23 +70,27 @@ public class FlightController {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     static class Passenger {
-        @JsonProperty("FirstName")
+
         private String firstName;
-        @JsonProperty("LastName")
+
         private String lastName;
 
+        @JsonProperty("FirstName")
         public String getFirstName() {
             return firstName;
         }
 
+        @JsonProperty("firstName")
         public void setFirstName(String firstName) {
             this.firstName = firstName;
         }
 
+        @JsonProperty("LastName")
         public String getLastName() {
             return lastName;
         }
 
+        @JsonProperty("lastName")
         public void setLastName(String lastName) {
             this.lastName = lastName;
         }
@@ -134,5 +143,30 @@ public class FlightController {
         List<Flight> flights = Arrays.asList(flight1, flight2);
 
         return flights;
+    }
+
+    static class Sum {
+        private int result;
+
+        public int getResult() {
+            return result;
+        }
+
+        public void setResult(int result) {
+            this.result = result;
+        }
+    }
+
+    @PostMapping("/flights/tickets/total")
+    public Sum sumPrices(@RequestBody Flight flight) {
+        List<Ticket> tickets = flight.getTickets();
+        int sum = 0;
+        for (var i = 0; i < tickets.size(); i++ ) {
+            int price = tickets.get(i).getPrice();
+            sum += price;
+        }
+        Sum total = new Sum();
+        total.setResult(sum);
+        return total;
     }
 }
