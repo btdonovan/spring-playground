@@ -1,7 +1,10 @@
 package us.navonod.demo;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -61,7 +64,26 @@ public class LessonsController {
     @GetMapping("")
     public Iterable<Lesson> all() {
         return this.repository.findAll();
+
     }
 
+    @GetMapping("/find/{title}")
+    public Lesson findByTitle(
+            @PathVariable(value="title") String title
+    ) {
+        Optional<Lesson> lesson = Optional.ofNullable(this.repository.findByTitle(title));
+        if (lesson.isPresent()) {
+            return lesson.get();
+        }
+        return new Lesson();
+    }
+
+    @GetMapping("/between")
+    public List<Lesson> findByDeliveredOnBetween(
+            @RequestParam(value="date1", required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date date1,
+            @RequestParam(value="date2", required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date date2
+    ) {
+        return this.repository.findByDeliveredOnBetween(date1, date2);
+    }
 
 }
