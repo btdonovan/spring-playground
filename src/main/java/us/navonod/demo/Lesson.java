@@ -1,12 +1,14 @@
 package us.navonod.demo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "lessons")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Lesson {
 
     @Id
